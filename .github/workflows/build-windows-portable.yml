@@ -80,3 +80,4 @@ jobs:
         with:
           name: EyeMineV2-Launcher-${{ steps.sha.outputs.sha }}
           path: install-portable/**
+          include-hidden-files: true

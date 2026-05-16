@@ -1,0 +1,54 @@
+
+#Survival inventory keys
+[Keys]
+	#key1
+	key1 = 321
+	#key2
+	key2 = 322
+	#key0
+	key0 = 320
+	#recipes: prev page
+	keySurvPrevPage = 324
+	#key5
+	key5 = 325
+	#key6
+	key6 = 326
+	#keySearch
+	keySearch = 264
+	#key3
+	key3 = 323
+	#key4
+	key4 = 324
+	#key9
+	key9 = 329
+	#key7
+	key7 = 327
+	#key8
+	key8 = 328
+	#keyScrollUp
+	keyScrollUp = 297
+	#keyNextItemRow
+	keyNextItemRow = 295
+	#keyNext
+	keyNext = 262
+	#keyPrev
+	keyPrev = 263
+	#toggle all/craftable
+	keySurvCraftable = 323
+	#open/close recipe book
+	keySurvRecipes = 322
+	#recipes: next tab
+	keySurvNextTab = 321
+	#keyNextItemCol
+	keyNextItemCol = 296
+	#hover output
+	keySurvOutput = 326
+	#recipes: next page
+	keySurvNextPage = 325
+	#recipes: prev tab
+	keySurvPrevTab = 320
+	#keyDrop
+	keyDrop = 268
+	#keyScrollDown
+	keyScrollDown = 298
+

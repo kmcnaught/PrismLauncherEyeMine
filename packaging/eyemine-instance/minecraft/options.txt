@@ -1,0 +1,141 @@
+version:1976
+autoJump:true
+autoSuggestions:true
+chatColors:true
+chatLinks:true
+chatLinksPrompt:true
+enableVsync:true
+entityShadows:true
+forceUnicodeFont:false
+discrete_mouse_scroll:false
+invertYMouse:false
+realmsNotifications:true
+reducedDebugInfo:false
+snooperEnabled:false
+showSubtitles:false
+touchscreen:false
+fullscreen:false
+bobView:true
+mouseSensitivity:0.5
+fov:0.0
+gamma:0.0
+renderDistance:12
+guiScale:0
+particles:0
+maxFps:120
+difficulty:2
+fancyGraphics:true
+ao:2
+biomeBlendRadius:2
+renderClouds:true
+resourcePacks:[]
+incompatibleResourcePacks:[]
+lastServer:
+lang:en_us
+chatVisibility:0
+chatOpacity:1.0
+textBackgroundOpacity:0.5
+backgroundForChatOnly:true
+hideServerAddress:false
+advancedItemTooltips:false
+pauseOnLostFocus:true
+overrideWidth:0
+overrideHeight:0
+heldItemTooltips:true
+chatHeightFocused:1.0
+chatHeightUnfocused:0.44366195797920227
+chatScale:1.0
+chatWidth:1.0
+mipmapLevels:4
+useNativeTransport:true
+mainHand:right
+attackIndicator:1
+narrator:0
+tutorialStep:find_tree
+mouseWheelSensitivity:1.0
+rawMouseInput:true
+glDebugVerbosity:1
+key_key.attack:key.mouse.left
+key_key.use:key.mouse.right
+key_key.forward:key.keyboard.w
+key_key.left:key.keyboard.a
+key_key.back:key.keyboard.s
+key_key.right:key.keyboard.d
+key_key.jump:key.keyboard.space
+key_key.sneak:key.keyboard.left.shift
+key_key.sprint:key.keyboard.left.control
+key_key.drop:key.keyboard.q
+key_key.inventory:key.keyboard.e
+key_key.chat:key.keyboard.t
+key_key.playerlist:key.keyboard.tab
+key_key.pickItem:key.mouse.middle
+key_key.command:key.keyboard.slash
+key_key.screenshot:key.keyboard.f2
+key_key.togglePerspective:key.keyboard.f5
+key_key.smoothCamera:key.keyboard.unknown
+key_key.fullscreen:key.keyboard.f11
+key_key.spectatorOutlines:key.keyboard.unknown
+key_key.swapHands:key.keyboard.f
+key_key.saveToolbarActivator:key.keyboard.c
+key_key.loadToolbarActivator:key.keyboard.x
+key_key.advancements:key.keyboard.l
+key_key.hotbar.1:key.keyboard.1
+key_key.hotbar.2:key.keyboard.2
+key_key.hotbar.3:key.keyboard.3
+key_key.hotbar.4:key.keyboard.4
+key_key.hotbar.5:key.keyboard.5
+key_key.hotbar.6:key.keyboard.6
+key_key.hotbar.7:key.keyboard.7
+key_key.hotbar.8:key.keyboard.8
+key_key.hotbar.9:key.keyboard.9
+key_Pick block:key.keyboard.keypad.2
+key_Start/stop mining:key.keyboard.m
+key_Gather dropped items:key.keyboard.keypad.multiply
+key_Mine one block:key.keyboard.n
+key_Jump and place block below:key.keyboard.0
+key_Start/stop attacking:key.keyboard.r
+key_Open chat:key.keyboard.end
+key_Open chest:key.keyboard.left.bracket
+key_Open crafting table:key.keyboard.right.bracket
+key_Turn night vision on/off:key.keyboard.f12
+key_Turn day/night cycle on/off:key.keyboard.f14
+key_Swap mine/place keys:key.keyboard.f10
+key_Use item:key.keyboard.keypad.0
+key_Use item continuously:key.keyboard.keypad.1
+key_Select previous item:key.keyboard.keypad.4
+key_Select next item:key.keyboard.keypad.5
+key_Turn mouse sensitivity up:key.keyboard.right
+key_Turn mouse sensitivity down:key.keyboard.left
+key_Toggle look with gaze (using mouse):key.keyboard.y
+key_Dwell build:key.keyboard.keypad.3
+key_Dwell mining:key.keyboard.keypad.6
+key_Start/stop flying (manual):key.keyboard.comma
+key_Start/stop flying (auto):key.keyboard.g
+key_Fly higher:key.keyboard.period
+key_Fly lower:key.keyboard.apostrophe
+key_Turn auto-jump on/off:key.keyboard.j
+key_Ride or dismount:key.keyboard.f15
+key_Start/stop walking forward:key.keyboard.h
+key_Turn walk speed up:key.keyboard.up
+key_Turn walk speed down:key.keyboard.down
+key_Start/stop sneaking:key.keyboard.z
+key_Start/stop swimming:key.keyboard.v
+key_Turn ironsights on/off:key.keyboard.p
+key_Start/stop walking (simple mode):key.keyboard.b
+soundCategory_master:1.0
+soundCategory_music:1.0
+soundCategory_record:1.0
+soundCategory_weather:1.0
+soundCategory_block:1.0
+soundCategory_hostile:1.0
+soundCategory_neutral:1.0
+soundCategory_player:1.0
+soundCategory_ambient:1.0
+soundCategory_voice:1.0
+modelPart_cape:true
+modelPart_jacket:true
+modelPart_left_sleeve:true
+modelPart_right_sleeve:true
+modelPart_left_pants_leg:true
+modelPart_right_pants_leg:true
+modelPart_hat:true
