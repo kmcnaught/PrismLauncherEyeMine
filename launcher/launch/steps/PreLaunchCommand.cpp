@@ -51,7 +51,20 @@ void PreLaunchCommand::executeTask()
     emit logLine(tr("Running Pre-Launch command: %1").arg(cmd), MessageLevel::Launcher);
     auto args = QProcess::splitCommand(cmd);
     const QString program = args.takeFirst();
+#ifdef Q_OS_WIN
+    // Qt's Windows command-line builder only quotes arguments containing spaces or
+    // double-quotes, but cmd.exe treats many more characters as special (parentheses,
+    // ampersands, pipes, etc.). Quote all arguments unconditionally so paths like
+    // "launcher(1)\..." work regardless of which characters they contain.
+    QStringList nativeParts;
+    for (const QString& arg : std::as_const(args))
+        nativeParts << u'"' + QString(arg).replace(u'"', QStringLiteral("\"\"")) + u'"';
+    m_process.setProgram(program);
+    m_process.setNativeArguments(nativeParts.join(u' '));
+    m_process.start();
+#else
     m_process.start(program, args);
+#endif
 }
 
 void PreLaunchCommand::on_state(LoggedProcess::State state)

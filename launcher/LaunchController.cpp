@@ -47,9 +47,14 @@
 #include "ui/dialogs/ProfileSetupDialog.h"
 #include "ui/dialogs/ProgressDialog.h"
 
+#include <QClipboard>
+#include <QDesktopServices>
+#include <QDir>
+#include <QGuiApplication>
 #include <QInputDialog>
 #include <QList>
 #include <QPushButton>
+#include <QUrl>
 #include <utility>
 
 #include "BuildConfig.h"
@@ -57,6 +62,12 @@
 #include "launch/steps/TextPrint.h"
 #include "tasks/Task.h"
 #include "ui/dialogs/ChooseOfflineNameDialog.h"
+
+// Path where the EyeMine installer places the mod JAR.
+// Must match MOD_SRC in packaging/eyemine-instance/launch-prep.bat
+#ifdef Q_OS_WIN
+static const QString EYEMINE_MOD_INSTALLER_DIR = "C:/Program Files (x86)/SpecialEffect/EyeMineV2/ModInstaller";
+#endif
 
 LaunchController::LaunchController() = default;
 
@@ -71,6 +82,31 @@ void LaunchController::executeTask()
         emitFailed(tr("Invalid Java arguments specified. Please fix this first."));
         return;
     }
+
+#ifdef Q_OS_WIN
+    // Check that EyeMine is installed before attempting to launch.
+    // The pre-launch script copies the mod JAR from this directory; if it doesn't exist
+    // the launch will fail with a cryptic console error rather than a useful message.
+    {
+        QDir modDir(EYEMINE_MOD_INSTALLER_DIR);
+        if (!modDir.exists() || modDir.entryList({ "eyemine*.jar" }, QDir::Files).isEmpty()) {
+            QMessageBox msgBox(m_parentWidget);
+            msgBox.setWindowTitle(tr("EyeMine Not Installed"));
+            msgBox.setIcon(QMessageBox::Warning);
+            msgBox.setText(tr("EyeMine does not appear to be installed on this computer.\n\n"
+                              "Please download and install EyeMine from the official website, "
+                              "then try launching again."));
+            QPushButton* downloadButton = msgBox.addButton(tr("Download EyeMine"), QMessageBox::ActionRole);
+            msgBox.addButton(tr("Close"), QMessageBox::RejectRole);
+            msgBox.exec();
+            if (msgBox.clickedButton() == downloadButton) {
+                QDesktopServices::openUrl(QUrl("https://github.com/SpecialEffect/EyeMine/releases"));
+            }
+            emitAborted();
+            return;
+        }
+    }
+#endif
 
     login();
 }
@@ -94,15 +130,22 @@ void LaunchController::decideAccount()
     if (!accounts->anyAccountIsValid()) {
         // Tell the user they need to log in at least one account in order to play.
         auto reply = CustomMessageBox::selectable(m_parentWidget, tr("No Accounts"),
-                                                  tr("In order to play Minecraft, you must have at least one Microsoft "
-                                                     "account which owns Minecraft logged in. "
-                                                     "Would you like to open the account manager to add an account now?"),
+                                                  tr("To play Minecraft with EyeMine, you need to log in with a Microsoft account. "
+                                                     "Would you like to log in now?"),
                                                   QMessageBox::Information, QMessageBox::Yes | QMessageBox::No)
                          ->exec();
 
         if (reply == QMessageBox::Yes) {
-            // Open the account manager.
-            APPLICATION->ShowGlobalSettings(m_parentWidget, "accounts");
+            // Open the Microsoft login dialog directly.
+            auto newAccount = MSALoginDialog::newAccount(m_parentWidget);
+            if (newAccount) {
+                accounts->addAccount(newAccount);
+                if (accounts->count() == 1) {
+                    accounts->setDefaultAccount(newAccount);
+                }
+                m_accountToUse = newAccount;
+            }
+            return;
         } else if (reply == QMessageBox::No) {
             // Do not open "profile select" dialog.
             return;
@@ -217,10 +260,13 @@ bool LaunchController::askPlayDemo() const
 {
     QMessageBox box(m_parentWidget);
     box.setWindowTitle(tr("Play demo?"));
+    const QString demoInfo = tr("\n\nYou can try the Minecraft demo, but it is limited: you can only play in the "
+                                "supplied Demo World, a Survival world where you cannot fly and monsters appear at "
+                                "night. Buying Minecraft also unlocks Creative worlds, which are much more "
+                                "beginner-friendly.\n\nDo you want to play the demo?");
     QString text = m_accountToUse
-                       ? tr("This account does not own Minecraft.\nYou need to purchase the game first to play the full version.")
-                       : tr("No account was selected for launch.");
-    text += tr("\n\nDo you want to play the demo?");
+                       ? tr("This account does not own Minecraft. You need to purchase the game to play the full version.") + demoInfo
+                       : tr("No account was selected for launch.") + demoInfo;
     box.setText(text);
     box.setIcon(QMessageBox::Warning);
     const auto* demoButton = box.addButton(tr("Play Demo"), QMessageBox::ButtonRole::YesRole);
@@ -465,6 +511,20 @@ void LaunchController::onFailed(QString reason)
     if (m_instance->settings()->get("ShowConsoleOnError").toBool()) {
         APPLICATION->showInstanceWindow(m_instance, "console");
     }
+
+    QMessageBox msgBox(m_parentWidget);
+    msgBox.setWindowTitle(tr("EyeMine Failed to Launch"));
+    msgBox.setIcon(QMessageBox::Critical);
+    msgBox.setText(tr("EyeMine was unable to start.\n\n"
+                      "For help, use the 'Copy Error' button and share the details with the EyeMine support team."));
+    msgBox.setDetailedText(reason);
+    QPushButton* copyButton = msgBox.addButton(tr("Copy Error"), QMessageBox::ActionRole);
+    msgBox.addButton(QMessageBox::Ok);
+    msgBox.exec();
+    if (msgBox.clickedButton() == copyButton) {
+        QGuiApplication::clipboard()->setText(reason);
+    }
+
     emitFailed(std::move(reason));
 }
 

@@ -63,6 +63,13 @@ jobs:
           cmake --install build --config "$BUILD_TYPE" --prefix install-portable
           cmake --install build --config "$BUILD_TYPE" --prefix install-portable --component portable
 
+      - name: Add EyeMine instance
+        shell: bash
+        run: |
+          INST=install-portable/instances/EyeMineV2
+          mkdir -p "$INST/minecraft/mods"
+          cp -r packaging/eyemine-instance/. "$INST/"
+
       - name: Get short SHA
         id: sha
         shell: bash
@@ -71,5 +78,5 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-artifact@v7
         with:
-          name: PrismLauncher-Windows-Portable-${{ steps.sha.outputs.sha }}-${{ inputs.build-type }}
+          name: EyeMineV2-Launcher-${{ steps.sha.outputs.sha }}
           path: install-portable/**
