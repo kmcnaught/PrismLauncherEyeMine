@@ -507,5 +507,7 @@ add_subdirectory(buildconfig)
 if(BUILD_TESTING)
     add_subdirectory(tests)
 endif()
+add_subdirectory(packaging/eyemine-launcher)
+
 # NOTE: this must always be last to appease the CMake deity of quirky install command evaluation order.
 add_subdirectory(launcher)

@@ -18,11 +18,21 @@ INSTANCE_SRC="$REPO_ROOT/packaging/eyemine-instance"
 ARTIFACT_DIR="${1:?Usage: $0 <extracted-artifact-dir> [output-dir]}"
 OUTPUT_DIR="${2:-$EYEMINE_ROOT/EyeMineV2-Launcher}"
 
-INSTANCE_DIR="$OUTPUT_DIR/instances/EyeMineV2"
+LAUNCHER_DIR="$OUTPUT_DIR/launcher"
+INSTANCE_DIR="$LAUNCHER_DIR/instances/EyeMineV2"
 
 # Validate inputs
-if [[ ! -f "$ARTIFACT_DIR/prismlauncher.exe" ]]; then
-    echo "ERROR: prismlauncher.exe not found in $ARTIFACT_DIR"
+# The artifact already has the launcher/ subdir layout from CI.
+# If given a flat artifact (prismlauncher.exe at root), handle that too.
+if [[ -f "$ARTIFACT_DIR/launcher/prismlauncher.exe" ]]; then
+    ARTIFACT_LAUNCHER="$ARTIFACT_DIR/launcher"
+    ARTIFACT_ROOT="$ARTIFACT_DIR"
+elif [[ -f "$ARTIFACT_DIR/prismlauncher.exe" ]]; then
+    ARTIFACT_LAUNCHER="$ARTIFACT_DIR"
+    ARTIFACT_ROOT=""
+    echo "WARNING: flat artifact layout detected — EyeMine.exe will not be copied (not present in flat builds)"
+else
+    echo "ERROR: prismlauncher.exe not found in $ARTIFACT_DIR or $ARTIFACT_DIR/launcher"
     echo "Download and extract the artifact from GitHub Actions first."
     exit 1
 fi
@@ -35,9 +45,15 @@ echo "==> Cleaning output dir: $OUTPUT_DIR"
 rm -rf "$OUTPUT_DIR"
 mkdir -p "$OUTPUT_DIR"
 
-echo "==> Copying launcher binaries from artifact"
-cp -r "$ARTIFACT_DIR"/. "$OUTPUT_DIR/"
-touch "$OUTPUT_DIR/portable.txt"   # ensure portable mode even if artifact omits it
+echo "==> Copying launcher binaries"
+mkdir -p "$LAUNCHER_DIR"
+cp -r "$ARTIFACT_LAUNCHER"/. "$LAUNCHER_DIR/"
+touch "$LAUNCHER_DIR/portable.txt"   # ensure portable mode
+
+# Copy EyeMine.exe to root if present in artifact
+if [[ -n "$ARTIFACT_ROOT" && -f "$ARTIFACT_ROOT/EyeMine.exe" ]]; then
+    cp "$ARTIFACT_ROOT/EyeMine.exe" "$OUTPUT_DIR/EyeMine.exe"
+fi
 
 echo "==> Copying EyeMine instance"
 mkdir -p "$INSTANCE_DIR/minecraft/mods"   # intentionally empty — populated at launch
@@ -52,4 +68,4 @@ zip -qr "$ZIP_NAME" "EyeMineV2-Launcher/"
 
 echo ""
 echo "Done: $ZIP_PATH"
-echo "Users: extract anywhere writable (Desktop, Documents), run prismlauncher.exe"
+echo "Users: extract anywhere writable (Desktop, Documents), run EyeMine.exe"

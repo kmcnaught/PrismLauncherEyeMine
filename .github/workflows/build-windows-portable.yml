@@ -28,7 +28,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v4
         with:
           submodules: true
 
@@ -60,13 +60,15 @@ jobs:
 
       - name: Install
         run: |
-          cmake --install build --config "$BUILD_TYPE" --prefix install-portable
-          cmake --install build --config "$BUILD_TYPE" --prefix install-portable --component portable
+          # Launcher binaries go into launcher/ subdir; LaunchMinecraftForEyeMine.exe goes at the root
+          cmake --install build --config "$BUILD_TYPE" --prefix install-portable/launcher
+          cmake --install build --config "$BUILD_TYPE" --prefix install-portable/launcher --component portable
+          cmake --install build --config "$BUILD_TYPE" --prefix install-portable --component eyemine_launcher
 
       - name: Add EyeMine instance
         shell: bash
         run: |
-          INST=install-portable/instances/EyeMineV2
+          INST=install-portable/launcher/instances/EyeMineV2
           mkdir -p "$INST/minecraft/mods"
           cp -r packaging/eyemine-instance/. "$INST/"
 
@@ -76,7 +78,7 @@ jobs:
         run: echo "sha=$(git rev-parse --short HEAD)" >> "$GITHUB_OUTPUT"
 
       - name: Upload artifact
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-artifact@v4
         with:
           name: EyeMineV2-Launcher-${{ steps.sha.outputs.sha }}
           path: install-portable/**
