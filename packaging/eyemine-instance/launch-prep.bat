@@ -13,3 +13,9 @@ if "!MOD_JAR!"=="" (
 
 if not exist "!INST_MC_DIR!\mods" mkdir "!INST_MC_DIR!\mods"
 copy /Y "!MOD_JAR!" "!INST_MC_DIR!\mods\eyemine.jar"
+
+powershell -ExecutionPolicy Bypass -File "!INST_DIR!\eyemine-sync.ps1"
+if errorlevel 1 (
+    echo ERROR: eyemine-sync.ps1 failed
+    exit /b 1
+)
